@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Code Intelligence</title>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html.min.js"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=3">
+</head>
+<body>
+
+<div class="top-nav">
+    <button class="btn-nav" id="btnBrowse" style="background-color: #d29922; color: #1e1e1e;" onclick="triggerNativeBrowse()">📁 Browse...</button>
+    <input type="text" class="path-input" id="folderPath" value="{{ default_path }}" placeholder="Enter absolute path to project folder...">
+    <button class="btn-nav" id="btnLoadFolder" onclick="loadFolder()">Scan Project</button>
+</div>
+
+<div class="main-layout">
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span>Project Files</span>
+            <button class="btn-toggle" onclick="toggleSidebar()" title="Hide Sidebar">◀</button>
+        </div>
+        <ul class="file-list" id="fileList">
+            <li style="color: #888;">Enter a path and click Scan Project...</li>
+        </ul>
+    </div>
+
+    <div class="resizer" id="resizer"></div>
+
+    <div class="content-area">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button class="btn-toggle" id="btnShowSidebar" onclick="toggleSidebar()" style="display: none;" title="Show Sidebar">☰</button>
+                <span id="activeFileDisplay">Select a file to begin</span>
+            </div>
+            <span id="status-badge">Idle</span>
+        </div>
+
+        <div class="action-bar">
+            <select id="analysisMode" class="btn-nav" style="background-color: #3c3c3c; border: 1px solid #555;">
+                <option value="both">Refactor & Security (Both)</option>
+                <option value="refactor">Refactor Only</option>
+                <option value="security">Security Only</option>
+            </select>
+            <button class="btn-start" id="startBtn" onclick="startAnalysis()" disabled>Analyze File</button>
+            <button class="btn-abort" id="abortBtn" onclick="abortAnalysis()">ABORT</button>
+        </div>
+
+        <div class="console-box" id="terminal">System Ready...</div>
+        
+        <!-- <div class="insights-panel" id="aiInsightsPanel">
+            <div class="insights-title">💡 AI Refactoring Justification</div>
+            <div class="insights-text" id="aiInsightsText">No context available.</div>
+        </div> -->
+
+        <div class="diff-container" id="diffBox"></div>
+
+        <div class="controls" id="controlPanel">
+            <button class="action-btn btn-approve" onclick="submitDecision('APPROVE')">Approve & Merge All</button>
+            <input type="text" id="tweakInput" placeholder="Reject specific lines or tweak (e.g., 'Keep the import changes, reject the rest')...">
+            <button class="action-btn btn-modify" onclick="submitDecision('MODIFY')">Submit Tweak</button>
+            <button class="action-btn btn-reject" onclick="submitDecision('REJECT')">Reject All</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}?v=3"></script>
+</body>
+</html>

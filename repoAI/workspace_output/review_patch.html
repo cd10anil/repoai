@@ -1,0 +1,45 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>AI Code Review Dashboard</title>
+            <style>
+                body { font-family: Arial, sans-serif; background-color: #1e1e1e; color: #d4d4d4; padding: 20px; }
+                h2 { background-color: #2d2d2d; padding: 10px; border-left: 5px solid #007acc; font-size: 16px; margin-bottom: 0; }
+                table.diff { width: 100%; background-color: #1e1e1e; border-collapse: collapse; font-family: Consolas, monospace; font-size: 13px; }
+                td.diff_header { background-color: #2d2d2d; color: #858585; text-align: right; padding-right: 10px; width: 40px; }
+                td.diff_next { display: none; }
+                .diff_add { background-color: rgba(35, 134, 54, 0.3); }
+                .diff_sub { background-color: rgba(248, 81, 73, 0.3); }
+                .diff_chg { background-color: rgba(210, 153, 34, 0.3); }
+                .status-bar { padding: 10px; background-color: #007acc; color: white; font-weight: bold; margin-bottom: 20px; }
+            </style>
+        </head>
+        <body>
+            <div class="status-bar">Status: Awaiting User Review... (Terminal Paused)</div>
+            
+            <div class="file-block">
+                <h2>File: C:\ri\repoAI\sample_enterprise_project\src\fuzzyai\fuzzer.py</h2>
+                
+    <table class="diff" id="difflib_chg_to0__top"
+           cellspacing="0" cellpadding="0" rules="groups" >
+        <colgroup></colgroup> <colgroup></colgroup> <colgroup></colgroup>
+        <colgroup></colgroup> <colgroup></colgroup> <colgroup></colgroup>
+        
+        <tbody>
+            <tr><td class="diff_next" id="difflib_chg_to0__0"></td><td class="diff_header" id="from0_229">229</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;attack_handler&nbsp;is&nbsp;not&nbsp;None&nbsp;and&nbsp;self._cleanup:</td><td class="diff_next"></td><td class="diff_header" id="to0_229">229</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;attack_handler&nbsp;is&nbsp;not&nbsp;None&nbsp;and&nbsp;self._cleanup:</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from0_230">230</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;await&nbsp;asyncio.gather(attack_handler.close())</td><td class="diff_next"></td><td class="diff_header" id="to0_230">230</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;await&nbsp;asyncio.gather(attack_handler.close())</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from0_231">231</td><td nowrap="nowrap"></td><td class="diff_next"></td><td class="diff_header" id="to0_231">231</td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from0_232">232</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;report&nbsp;=&nbsp;FuzzerResult.from_attack_summary(self._attack_id,&nbsp;raw_results)</td><td class="diff_next"></td><td class="diff_header" id="to0_232">232</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;report&nbsp;=&nbsp;FuzzerResult.from_attack_summary(self._attack_id,&nbsp;raw_results)</td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from0_233">233</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;report,&nbsp;raw_results</td><td class="diff_next"></td><td class="diff_header" id="to0_233">233</td><td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;report,&nbsp;raw_results</td></tr>
+            <tr><td class="diff_next"><a href="#difflib_chg_to0__top">t</a></td><td class="diff_header" id="from0_234">234</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td class="diff_next"><a href="#difflib_chg_to0__top">t</a></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from0_235">235</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from0_236">236</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+            <tr><td class="diff_next"></td><td class="diff_header" id="from0_237">237</td><td nowrap="nowrap"><span class="diff_sub">&nbsp;</span></td><td class="diff_next"></td><td class="diff_header"></td><td nowrap="nowrap"></td></tr>
+        </tbody>
+    </table>
+            </div>
+            
+        </body>
+        </html>
+        

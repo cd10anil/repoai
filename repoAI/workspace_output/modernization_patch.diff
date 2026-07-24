@@ -1,0 +1,10 @@
+--- original_code.txt
++++ refactored_code.txt
+@@ -231,7 +231,3 @@
+ 
+         report = FuzzerResult.from_attack_summary(self._attack_id, raw_results)
+         return report, raw_results
+-    
+-
+-
+-
