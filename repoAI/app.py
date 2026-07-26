@@ -1,12 +1,12 @@
 import os
 import json
 import difflib
+import subprocess
 from flask import Flask, render_template, Response, request, jsonify
 from typing import Dict
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
 import shutil
-import threading
 
 app = Flask(__name__)
 
@@ -71,35 +71,44 @@ def index():
 
 @app.route('/browse_local', methods=['POST'])
 def browse_local():
-    """Uses a dedicated thread to safely open the Windows folder dialog without freezing Flask"""
-    result = {"path": ""}
+    """Opens folder dialog - tries tkinter first, falls back to PowerShell."""
+    try:
+        import tkinter as tk
+        from tkinter import filedialog
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes('-topmost', True)
+        folder_path = filedialog.askdirectory(title="Select Enterprise Project Folder")
+        root.destroy()
+        if folder_path:
+            return jsonify({"status": "success", "folder_path": folder_path.replace("/", "\\")})
+        return jsonify({"status": "cancelled"})
+    except Exception as e:
+        print(f"[SYSTEM] Tkinter failed: {e}, falling back to PowerShell")
 
-    def open_dialog():
-        try:
-            import tkinter as tk
-            from tkinter import filedialog
-            root = tk.Tk()
-            root.withdraw()
-            root.attributes('-topmost', True) # Force to front
-            result["path"] = filedialog.askdirectory(title="Select Enterprise Project Folder")
-            root.destroy()
-        except Exception as e:
-            print(f"[SYSTEM ERROR] Tkinter dialog failed: {e}")
-
-    # Run the UI dialog in a safe, isolated thread
-    dialog_thread = threading.Thread(target=open_dialog)
-    dialog_thread.start()
-    dialog_thread.join() # Wait for the user to pick a folder
-
-    if result["path"]:
-        folder_path = result["path"].replace("/", "\\")
-        return jsonify({"status": "success", "folder_path": folder_path})
-        
+    try:
+        ps_script = (
+            'Add-Type -AssemblyName System.Windows.Forms; '
+            '$d = New-Object System.Windows.Forms.FolderBrowserDialog; '
+            '$d.Description = "Select Enterprise Project Folder"; '
+            'if ($d.ShowDialog() -eq "OK") { Write-Output $d.SelectedPath }'
+        )
+        r = subprocess.run(
+            ['powershell', '-NoProfile', '-Command', ps_script],
+            capture_output=True, text=True, timeout=120
+        )
+        path = r.stdout.strip()
+        if path:
+            return jsonify({"status": "success", "folder_path": path.replace("/", "\\")})
+    except Exception as e:
+        print(f"[SYSTEM] PowerShell fallback failed: {e}")
     return jsonify({"status": "cancelled"})
 
 @app.route('/scan_folder', methods=['POST'])
 def scan_folder():
     data = request.json
+    if data is None:
+        return jsonify({"status": "error", "message": "Invalid request body. Expected JSON."})
     folder_path = data.get('folder_path', '')
     if os.path.isdir(folder_path):
         WORKSPACE_STATE["repo_path"] = folder_path
@@ -232,7 +241,7 @@ def handle_decision():
 
 if __name__ == '__main__':
     print("\n==================================================================")
-    print(" 🚀 AGENTIC AI SERVER RUNNING")
-    print(" 👉 Open your browser and go to: http://127.0.0.1:5000")
+    print(" [SERVER] AGENTIC AI SERVER RUNNING")
+    print(" [URL]    Open your browser and go to: http://127.0.0.1:5000")
     print("==================================================================\n")
     app.run(debug=True, port=5000)

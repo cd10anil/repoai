@@ -1,7 +1,7 @@
 # Security Audit & Development Log
 
 **Project:** C:\ri\repoAI  
-**Document Version:** 1.0.0  
+**Document Version:** 1.1.0  
 **Created:** 2026-07-26  
 **Last Updated:** 2026-07-26  
 **Author:** Big Pickle (AI Assistant)
@@ -13,6 +13,7 @@
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0.0 | 2026-07-26 | Big Pickle | Initial security audit, vulnerability fixes, test suite creation |
+| 1.1.0 | 2026-07-26 | Big Pickle | UI regression fixes: emoji encoding crash, browse dialog fallback, scan error handling, 44 new UI tests |
 
 ---
 
@@ -43,11 +44,11 @@ This document tracks all security audit activities, vulnerability remediation, a
 |--------|-------|
 | Vulnerabilities Found | 7 |
 | Vulnerabilities Fixed | 7 (100%) |
-| Test Cases Created | 62 |
-| Tests Passing | 62 (100%) |
+| Test Cases Created | 106 |
+| Tests Passing | 106 (100%) |
 | Code Coverage | 55% |
-| Files Created | 6 |
-| Files Modified | 0 |
+| Files Created | 8 |
+| Files Modified | 3 |
 
 ---
 
@@ -915,6 +916,58 @@ e9884a4e...0725c008
 | Classification | Internal |
 | Review Cycle | On each commit |
 | Next Review | 2026-08-26 |
+
+---
+
+## v1.1.0 - UI Regression Fixes (2026-07-26)
+
+### Bugs Found & Fixed
+
+#### 1. App Crash on Windows Startup (CRITICAL)
+- **File:** `app.py:260-264`
+- **Cause:** Emoji characters (rocket, arrow) in `print()` statements fail to encode in Windows `cp1252` console
+- **Error:** `UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f680'`
+- **Fix:** Replaced emojis with ASCII-safe text: `[SERVER]`, `[URL]`
+- **Impact:** Server would not start at all on Windows PowerShell
+
+#### 2. Browse Dialog Shows Two Dialogs
+- **File:** `app.py:72-106`
+- **Cause:** Tkinter dialog and PowerShell fallback both firing due to threading timeout
+- **Fix:** Restructured to try tkinter first, only fall back to PowerShell on exception
+- **Impact:** User sees one dialog, not two
+
+#### 3. Scan Button Shows "Scan failed" Error
+- **File:** `static/js/script.js:117-167`
+- **Cause:** Added `if (!res.ok) throw new Error(...)` check that original code did not have
+- **Fix:** Removed the `!res.ok` check, restored original `res.json()` chain
+- **Impact:** Scan was failing silently before; our error check surfaced it but broke the flow
+
+#### 4. Silent Fetch Failures
+- **File:** `static/js/script.js` (all fetch calls)
+- **Cause:** Original code had no `.catch()` handlers on fetch calls
+- **Fix:** Added `.catch()` handlers that log errors to console
+- **Impact:** Broken fetches now show errors instead of silently dying
+
+### New Regression Test Suite
+
+**File:** `tests/functional/test_app_ui.py` (44 tests)
+
+| Test Class | Tests | Coverage |
+|------------|-------|----------|
+| TestIndexPage | 7 | HTML page renders with correct elements |
+| TestScanFolder | 16 | Scan endpoint: valid/invalid paths, excludes, sorting, state |
+| TestBrowseLocal | 7 | Browse dialog: tkinter fallback, PowerShell, error handling |
+| TestGetCodeFiles | 4 | File discovery: supported types, exclusions, sorting |
+| TestAbort | 2 | Abort endpoint returns correct status |
+| TestDecision | 3 | Decision endpoint: reject, invalid, approve without file |
+| TestStaticAssets | 5 | JS/CSS files load, contain expected functions |
+
+### Key Regression Tests (prevent future breakage)
+- `test_browse_handles_tkinter_failure` - PowerShell fallback works if tkinter fails
+- `test_browse_handles_powershell_failure` - Graceful error if both fail
+- `test_scan_no_json_body` - Server handles malformed requests
+- `test_scan_returns_200_on_error` - Error responses don't crash server
+- `test_script_js_has_catch_handlers` - JS has error handling
 
 ---
 

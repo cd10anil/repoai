@@ -63,7 +63,8 @@ function triggerNativeBrowse() {
     .catch(err => {
         btnBrowse.innerText = originalText;
         btnBrowse.disabled = false;
-        alert("Failed to open native dialog. Ensure Tkinter is installed.");
+        console.error("Browse failed:", err);
+        alert("Failed to open folder dialog. You can type the path manually.");
     });
 }
 
@@ -115,6 +116,11 @@ window.addEventListener('mouseup', () => {
 
 // --- MAIN APPLICATION LOGIC ---
 function loadFolder() {
+    if (!folderPath.value || folderPath.value.trim() === "") {
+        fileList.innerHTML = '<li style="color: orange;">Please enter a folder path first.</li>';
+        return;
+    }
+
     btnLoadFolder.innerText = "Scanning...";
     btnLoadFolder.disabled = true;
     
@@ -140,6 +146,12 @@ function loadFolder() {
         } else {
             fileList.innerHTML = `<li style="color: red;">${data.message}</li>`;
         }
+    })
+    .catch(err => {
+        btnLoadFolder.innerText = "Scan Project";
+        btnLoadFolder.disabled = false;
+        console.error("Scan failed:", err);
+        fileList.innerHTML = `<li style="color: red;">Scan failed: ${err.message}. Is the server running?</li>`;
     });
 }
 
@@ -182,7 +194,7 @@ function abortAnalysis() {
             statusBadge.innerText = "Aborted";
             resetUIState();
         }
-    });
+    }).catch(err => console.error("Abort failed:", err));
 }
 
 function resetUIState() {
@@ -359,5 +371,12 @@ function submitDecision(action) {
             terminal.style.display = 'block';
             writeTerminal(`\n\n[System] Fix Rejected. Modifications discarded.`);
         }
+    })
+    .catch(err => {
+        console.error("Decision failed:", err);
+        controlPanel.style.display = 'none';
+        terminal.style.display = 'block';
+        writeTerminal(`\n\n[ERROR] Failed to submit decision: ${err.message}`);
+        statusBadge.innerText = "Error";
     });
 }
