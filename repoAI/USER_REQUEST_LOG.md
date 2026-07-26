@@ -72,6 +72,8 @@
 | 38 | `froom 17 to 26 it has all my commands given, but from 1 to 16 it appears like summary , not exact my words/commands, like when i give /init or any other commands. did we missed them?` | Extracted exact messages from SQLite database | Done |
 | 39 | `can you help me how can i get those my previous messages, are they logged somewher in my folder/session or somehwerE?` | Found database at `~\.local\share\opencode\opencode.db`, extracted all 39 messages | Done |
 | 40 | `update document and do github checkin including this message entry in document that,for record and keep this in document => All of user exact messages are stored in C:\Users\hp\.local\share\opencode\opencode.db.` | Updated doc with DB location note, committed | Done |
+| 41 | `create a folder and kept all code we used till now like _messages.py in that folders.` | Created `scripts/` folder with check_db.py + extract_messages.py | Done |
+| 42 | `create another file that contains all commands you used as helper , with reason/comment above each command...` | Created `scripts/HELPER_COMMANDS.md` with 25 documented commands | Done |
 
 ---
 
@@ -79,10 +81,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Requests | 40 |
+| Total Requests | 42 |
 | Exact Messages | 40 (all from database) |
 | Sessions | 3 (mighty-pixel, playful-mountain, playful-orchid) |
-| Completed | 40 |
+| Completed | 42 |
 | In Progress | 0 |
 
 ---
