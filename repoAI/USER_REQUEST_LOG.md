@@ -71,6 +71,7 @@
 | 37 | `i want exactly what i typed since begining, all commands in sequence` | Rewrote with exact messages where available | Done |
 | 38 | `froom 17 to 26 it has all my commands given, but from 1 to 16 it appears like summary , not exact my words/commands, like when i give /init or any other commands. did we missed them?` | Extracted exact messages from SQLite database | Done |
 | 39 | `can you help me how can i get those my previous messages, are they logged somewher in my folder/session or somehwerE?` | Found database at `~\.local\share\opencode\opencode.db`, extracted all 39 messages | Done |
+| 40 | `update document and do github checkin including this message entry in document that,for record and keep this in document => All of user exact messages are stored in C:\Users\hp\.local\share\opencode\opencode.db.` | Updated doc with DB location note, committed | Done |
 
 ---
 
@@ -78,11 +79,24 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Requests | 39 |
-| Exact Messages | 39 (all from database) |
+| Total Requests | 40 |
+| Exact Messages | 40 (all from database) |
 | Sessions | 3 (mighty-pixel, playful-mountain, playful-orchid) |
-| Completed | 39 |
+| Completed | 40 |
 | In Progress | 0 |
+
+---
+
+## Data Source
+
+> **All user exact messages are stored in `C:\Users\hp\.local\share\opencode\opencode.db`.**
+> 
+> This SQLite database is OpenCode's persistent session store. Tables used:
+> - `session` — session metadata (3 sessions)
+> - `message` — all messages (290 rows, role/user + role/assistant)
+> - `part` — message text content (1119 rows)
+> 
+> To query: `SELECT * FROM part WHERE data LIKE '%"type":"text"%'` after joining with `message` on `role='user'`.
 
 ---
 
